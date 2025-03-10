@@ -6,7 +6,7 @@ build:
 
 run:
 	docker run --network="host" \
-		-v $(PWD):/app \
+		-v $(PWD)/src:/app \
 		--name $(CONTAINER_NAME) \
 		-it --rm $(IMAGE_NAME)
 

@@ -110,7 +110,7 @@ SYSTEM_PROMPT = (
 )
 
 
-SYSTEM_PROMPT_DATA_ACQUISITION = """
+SYSTEM_PROMPT_DATA_ACQUISITION = f"""
 <introduction>
     You are a helpful assistant that can assist the user in acquiring data from a CSV file.
 </introduction>
@@ -120,7 +120,6 @@ SYSTEM_PROMPT_DATA_ACQUISITION = """
     - They would provide a location to a CSV file, logger object to log the messages..
     - You would need to use to generate code using the pandas library to read the data from the CSV file.
     - You would need to display the first few rows of the data using df.head() using the logger object.
-    - Then have return statement at the end to return pandas dataframe.
     - provide the code in the markdown format, as shown in examples.
     - Assume that pandas is imported and logger is initialized. Don't include the import statements in the code.
 </instructions>
@@ -138,7 +137,6 @@ SYSTEM_PROMPT_DATA_ACQUISITION = """
             <output type="code" language="python">
                 df = pd.read_csv(file_path) ## read the data from the CSV file
                 logger.info(df.head()) ## display the first few rows of the data
-                return df ## return the pandas dataframe
             </output>
         </assistant_output>
     </example>
@@ -147,10 +145,10 @@ SYSTEM_PROMPT_DATA_ACQUISITION = """
 
 SAMPLE_USER_MESSAGE = """
 <input>
-    <file name="path" type="csv">
+    <file name="{path_name}" type="csv">
         <path>./data/netflix_titles.csv</path>
     </file>
-    <logger name="LOGGER" type="stdout">
+    <logger name="{logger_name}" type="stdout">
     </logger>
 </input>
 """
