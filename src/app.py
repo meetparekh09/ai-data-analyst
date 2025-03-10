@@ -5,6 +5,7 @@ import xmltodict
 import logging
 import pandas as pd
 from openai import OpenAI
+from pathlib import Path
 
 from constants import SYSTEM_PROMPT_DATA_ACQUISITION, SAMPLE_USER_MESSAGE
 from util import get_logger
@@ -21,21 +22,22 @@ client = OpenAI(
     base_url=OPENAI_BASE_URL,
 )
 
-path = "data/netflix_titles.csv"
+path = "data/online_retail_2.xlsx"
 
-def get_data(path, logger):
+def get_data(path, logger, user_prompt):
     ldict = {}    
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT_DATA_ACQUISITION},
-        {"role": "user", "content": SAMPLE_USER_MESSAGE.format(path_name=path, logger_name=logger)},
+        {"role": "user", "content": user_prompt},
     ]
+    import pdb; pdb.set_trace()
     retry = 0
     while retry < 3:
         response = client.chat.completions.create(
             model=OPENAI_COMPLETION_MODEL,
             messages=messages,
         )
-        parsed_response = xmltodict.parse(response.choices[0].message.content)
+        parsed_response = xmltodict.parse(response.choices[0].message.content.replace("```python", "").replace("```", ""))
         logger.info(parsed_response)
 
         try:
@@ -67,7 +69,9 @@ def get_data(path, logger):
 
 
 if __name__ == "__main__":
-    df = get_data(path, logger)
+    file_type = Path(path).suffix.replace(".", "")
+    user_prompt = SAMPLE_USER_MESSAGE.format(path_name=path, file_type=file_type, logger_name=logger)
+    df = get_data(path, logger, user_prompt)
     if df is None:
         logger.error("Failed to get data")
         sys.exit(1)

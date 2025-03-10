@@ -145,8 +145,7 @@ SYSTEM_PROMPT_DATA_ACQUISITION = f"""
 
 SAMPLE_USER_MESSAGE = """
 <input>
-    <file name="{path_name}" type="csv">
-        <path>./data/netflix_titles.csv</path>
+    <file name="{path_name}" type="{file_type}">
     </file>
     <logger name="{logger_name}" type="stdout">
     </logger>
