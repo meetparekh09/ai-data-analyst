@@ -109,8 +109,11 @@ SYSTEM_PROMPT = (
     "presentation is understandable for non-technical stakeholders.\n\n"
 )
 
+########################################################
+# XML
+########################################################
 
-SYSTEM_PROMPT_DATA_ACQUISITION = f"""
+SYSTEM_PROMPT_DATA_ACQUISITION_XML = f"""
 <introduction>
     You are a helpful assistant that can assist the user in acquiring data from a CSV file.
 </introduction>
@@ -143,11 +146,47 @@ SYSTEM_PROMPT_DATA_ACQUISITION = f"""
 </examples>
 """
 
-SAMPLE_USER_MESSAGE = """
+SAMPLE_USER_MESSAGE_XML = """
 <input>
     <file name="{path_name}" type="{file_type}">
     </file>
     <logger name="{logger_name}" type="stdout">
     </logger>
 </input>
+"""
+
+########################################################
+# MD
+########################################################
+
+SYSTEM_PROMPT_DATA_ACQUISITION_MD = """
+# Introduction
+    You are a helpful assistant that can assist the user in acquiring data from a CSV file.
+
+# Instructions
+    - Either User or other assistant would be interacting with you.
+    - They would provide a location to a CSV file, logger object to log the messages..
+    - You would need to use to generate code using the pandas library to read the data from the CSV file.
+    - You would need to display the first few rows of the data using df.head() using the logger object.
+    - provide the code in the markdown format, as shown in examples.
+    - Assume that pandas is imported and logger is initialized. Don't include the import statements in the code.
+
+# Examples
+    
+## Example 1
+    
+### User Input
+file variable name: file_path
+file type: csv
+logger variable name: logger
+
+### Assistant Output
+df = pd.read_csv(file_path) ## read the data from the CSV file
+logger.info(df.head()) ## display the first few rows of the data
+"""
+
+SAMPLE_USER_MESSAGE_MD = """
+file variable name: {path_name}
+file type: {file_type}
+logger variable name: {logger_name}
 """

@@ -2,3 +2,4 @@ python-dotenv
 openai
 xmltodict
 pandas
+openpyxl

@@ -7,8 +7,8 @@ import pandas as pd
 from openai import OpenAI
 from pathlib import Path
 
-from constants import SYSTEM_PROMPT_DATA_ACQUISITION, SAMPLE_USER_MESSAGE
-from util import get_logger
+from constants import SYSTEM_PROMPT_DATA_ACQUISITION_MD, SAMPLE_USER_MESSAGE_MD
+from util import get_logger, print_logprobs
 dotenv.load_dotenv(dotenv_path="./openai.env")
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
@@ -24,36 +24,30 @@ client = OpenAI(
 
 path = "data/online_retail_2.xlsx"
 
-def get_data(path, logger, user_prompt):
+def get_data(path, logger, user_prompt, verbose=False, n=2):
     ldict = {}    
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT_DATA_ACQUISITION},
+        {"role": "system", "content": SYSTEM_PROMPT_DATA_ACQUISITION_MD},
         {"role": "user", "content": user_prompt},
     ]
-    import pdb; pdb.set_trace()
     retry = 0
     while retry < 3:
         response = client.chat.completions.create(
             model=OPENAI_COMPLETION_MODEL,
             messages=messages,
+            logprobs=verbose,
+            n=n if verbose else 1,
         )
-        parsed_response = xmltodict.parse(response.choices[0].message.content.replace("```python", "").replace("```", ""))
-        logger.info(parsed_response)
+        if verbose:
+            logger.info(f"Printing top {n} logprobs:")
+            print_logprobs(response.choices[0].logprobs.content, logger)
+            print_logprobs(response.choices[1].logprobs.content, logger)
 
         try:
-            output = parsed_response["output"]
-            if output["@type"] != "code":
-                retry += 1
-                logger.info(f"Retrying as output is not code: {retry} of 3")
-                continue
-            
-            if output["@language"] != "python":
-                retry += 1
-                logger.info(f"Retrying as output is not python: {retry} of 3")
-                continue
-            
-            code = output["#text"].replace("\n    ", "\n")
-            logger.info(f"Executing code: {code}")
+            output = response.choices[0].message.content.replace("```python", "").replace("```", "")
+            code = output.replace("\n    ", "\n")
+            if verbose:
+                logger.info(f"\n\nExecuting code:\n{code}")
             exec(code, globals(), ldict)
             break
         except Exception as e:
@@ -70,7 +64,7 @@ def get_data(path, logger, user_prompt):
 
 if __name__ == "__main__":
     file_type = Path(path).suffix.replace(".", "")
-    user_prompt = SAMPLE_USER_MESSAGE.format(path_name=path, file_type=file_type, logger_name=logger)
+    user_prompt = SAMPLE_USER_MESSAGE_MD.format(path_name=path, file_type=file_type, logger_name=logger)
     df = get_data(path, logger, user_prompt)
     if df is None:
         logger.error("Failed to get data")

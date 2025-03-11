@@ -14,3 +14,7 @@ def get_logger(name, handler=get_stdout_handler(), formatter=get_formatter()):
     logger.addHandler(handler)
     logger.setLevel(logging.INFO)
     return logger
+
+
+def print_logprobs(logprobs, logger):
+    logger.info(" ".join([f"{logprob.token}({logprob.logprob})" for logprob in logprobs]))
