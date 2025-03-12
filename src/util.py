@@ -9,10 +9,11 @@ def get_formatter():
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     return formatter
 
-def get_logger(name, handler=get_stdout_handler(), formatter=get_formatter()):
+def get_logger(name, level=logging.INFO, handler=get_stdout_handler(), formatter=get_formatter()):
     logger = logging.getLogger(name)
+    handler.setFormatter(formatter)
+    logger.setLevel(level)
     logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
     return logger
 
 

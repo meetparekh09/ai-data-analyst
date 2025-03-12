@@ -190,3 +190,69 @@ file variable name: {path_name}
 file type: {file_type}
 logger variable name: {logger_name}
 """
+
+PRELIMINARY_ANALYSIS_PROMPT_MD = """
+# Table of Contents
+1. Introduction[#introduction]
+2. Data Information[#data-information]
+3. Planning for Preliminary Analysis[#planning-for-preliminary-analysis]
+4. Python Code for Preliminary Analysis[#python-code-for-preliminary-analysis]
+5. Output from the Preliminary Analysis[#output-from-the-preliminary-analysis]
+6. Description of the Analysis for Data Cleaning, Visualization, and Descriptive Statistics[#description-of-the-analysis-for-data-cleaning-visualization-and-descriptive-statistics]
+
+## Introduction
+Given below is the information of the dataset in section 2. Your task is to plan for the preliminary analysis, write python code that performs that analysis.
+Once done there is another assistant who will execute the code and give you the output. So don't include charts in your response, because you would need data that you could work with.
+It is going to be job of subsequent assistants to use your output and generate charts.
+After that you would need to describe the findings from preliminary analysis that would be communicated to subsequent assistants for data cleaning, what descriptive statistics to run for data, and what are corresponding visualizations that would be good to present.
+Also assume that pandas is imported. Don't include the import statements in the code.
+Name of pandas dataframe is {df_name}
+Create a variable in code name preliminary_results that stores output that would be returned back to you.
+
+## Data Information
+following is the output of df.shape:
+{df_shape_output}
+
+following is the output of df.columns:
+{df_columns_output}
+
+following is the output of df.dtypes:
+{df_dtypes_output}
+
+following is the output of df.describe():
+{df_describe_output}
+
+## Planning for Preliminary Analysis
+"""
+
+CODE_EXTRACTOR_SYSTEM_PROMPT_MD = """
+# Instructions
+You are a helpful assistant that extracts python code from the text.
+
+# Examples
+
+## Input Text
+This is how the output of the code would look like:
+```python
+print("Hello, world!")
+```
+## Output
+print("Hello, world!")
+
+# Start
+
+"""
+
+CODE_EXTRACTOR_USER_MESSAGE_MD = """
+## Input Text
+{input_text}
+
+## Output
+"""
+
+OUTPUT_FROM_PRELIMINARY_ANALYSIS_MD = """
+## Output from the Preliminary Analysis
+{preliminary_results}
+
+## Description of the Analysis for Data Cleaning, Visualization, and Descriptive Statistics
+"""
