@@ -225,6 +225,34 @@ following is the output of df.describe():
 ## Planning for Preliminary Analysis
 """
 
+DATA_CLEANING_PROMPT_MD = """
+# Table of Contents
+1. Introduction[#introduction]
+2. Results from Preliminary Analysis[#results-from-preliminary-analysis]
+3. Planning for Data Cleaning[#planning-for-data-cleaning]
+4. Python Code for Data Cleaning[#python-code-for-data-cleaning]
+5. Report from Data Cleaning[#report-from-data-cleaning]
+
+## Introduction
+You are a helpful assistant that can assist the user in cleaning data in a pandas dataframe.
+Given below is the information from the preliminary analysis. Your task is to plan for the data cleaning, write python code that performs that cleaning.
+First Plan for the data cleaning, plan to perform in depth cleaning and not just removing negatives, filling missing values, etc.
+Once done there is another assistant who will execute the code and give you the output. So don't include charts in your response, because you would need data that you could work with.
+It is going to be job of subsequent assistants to use your output and generate charts.
+After that you would need to describe the steps performed in data cleaning as a report to subsequent assistants. This report would be used by another assistant to generate charts, run descriptive statistics etc.
+Also assume that pandas is imported. Don't include the import statements in the code.
+Name of pandas dataframe is {df_name}
+
+## Results from Preliminary Analysis
+Following is the output from the preliminary analysis:
+{preliminary_results}
+
+Following is the report from Preliminary Analysis assistant:
+{preliminary_analysis_report}
+
+## Planning for Data Cleaning
+"""
+
 CODE_EXTRACTOR_SYSTEM_PROMPT_MD = """
 # Instructions
 You are a helpful assistant that extracts python code from the text.
