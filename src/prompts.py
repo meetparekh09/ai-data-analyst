@@ -256,3 +256,59 @@ OUTPUT_FROM_PRELIMINARY_ANALYSIS_MD = """
 
 ## Description of the Analysis for Data Cleaning, Visualization, and Descriptive Statistics
 """
+
+
+CODE_ERROR_SYSTEM_PROMPT_MD = """
+# Instructions
+You are a helpful assistant that can assist the user in fixing the code.
+
+# Examples
+## Reasoning of the Code
+Load the data from the xlsx file using pandas.
+
+## Code
+```python
+df = pd.read_csv(file_path)
+```
+
+## Error
+```Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+  File "/Users/meetparekh/Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1026, in read_csv
+    return _read(filepath_or_buffer, kwds)
+  File "/Users/meetparekh/Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 620, in _read
+    parser = TextFileReader(filepath_or_buffer, **kwds)
+  File "/Users/meetparekh/Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1620, in __init__
+    self._engine = self._make_engine(f, self.engine)
+  File "/Users/meetparekh/Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/readers.py", line 1898, in _make_engine
+    return mapping[engine](f, **self.options)
+  File "/Users/meetparekh/Library/Python/3.9/lib/python/site-packages/pandas/io/parsers/c_parser_wrapper.py", line 93, in __init__
+    self._reader = parsers.TextReader(src, **kwds)
+  File "parsers.pyx", line 574, in pandas._libs.parsers.TextReader.__cinit__
+  File "parsers.pyx", line 663, in pandas._libs.parsers.TextReader._get_header
+  File "parsers.pyx", line 874, in pandas._libs.parsers.TextReader._tokenize_rows
+  File "parsers.pyx", line 891, in pandas._libs.parsers.TextReader._check_tokenize_status
+  File "parsers.pyx", line 2053, in pandas._libs.parsers.raise_parser_error
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xde in position 16: invalid continuation byte```
+
+## Fix
+File type is not csv, and you are trying to load it as csv. In description it suggests that file type is xlsx, so you need to load it as xlsx.
+```python
+df = pd.read_excel(file_path)
+```
+
+# Start
+"""
+
+CODE_ERROR_PROMPT_USER_MESSAGE_MD = """
+## Reasoning of the Code
+{reasoning_of_the_code}
+
+## Code
+{code}
+
+## Error
+{error}
+
+## Fix
+"""
