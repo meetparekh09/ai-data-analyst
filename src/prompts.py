@@ -161,12 +161,12 @@ SAMPLE_USER_MESSAGE_XML = """
 
 SYSTEM_PROMPT_DATA_ACQUISITION_MD = """
 # Introduction
-    You are a helpful assistant that can assist the user in acquiring data from a CSV file.
+    You are a helpful assistant that can assist the user in acquiring data from a file.
 
 # Instructions
     - Either User or other assistant would be interacting with you.
-    - They would provide a location to a CSV file, logger object to log the messages..
-    - You would need to use to generate code using the pandas library to read the data from the CSV file.
+    - They would provide a location to a file, logger object to log the messages..
+    - You would need to use to generate code using the pandas library to read the data from the file.
     - You would need to display the first few rows of the data using df.head() using the logger object.
     - provide the code in the markdown format, as shown in examples.
     - Assume that pandas is imported and logger is initialized. Don't include the import statements in the code.
@@ -242,6 +242,8 @@ It is going to be job of subsequent assistants to use your output and generate c
 After that you would need to describe the steps performed in data cleaning as a report to subsequent assistants. This report would be used by another assistant to generate charts, run descriptive statistics etc.
 Also assume that pandas is imported. Don't include the import statements in the code.
 Name of pandas dataframe is {df_name}
+Planning for data cleaning is a conversation between you and user. Where you indicate your planning in ### Plan for Cleaning, followed by user's feedback in ### User Feedback.
+Keep on refining the plan until user is satisfied. Get user sign off on the final plan, then only write the code, otherwise it would cause significant harm. If user is satisfied, then you can go ahead and write the code.
 
 ## Results from Preliminary Analysis
 Following is the output from the preliminary analysis:
@@ -251,6 +253,56 @@ Following is the report from Preliminary Analysis assistant:
 {preliminary_analysis_report}
 
 ## Planning for Data Cleaning
+### Plan for Cleaning
+"""
+
+USER_FEEDBACK_PROMPT_MD = """
+### User Feedback
+{user_feedback}
+"""
+
+CONTAINS_CODE_PROMPT_MD = """
+# Instructions
+You are a helpful assistant that checks if the text contains python code.
+
+# Examples
+## Input Text
+This is the plan for cleaning:
+1. Fill missing values
+2. Remove duplicates
+3. Remove outliers
+4. Normalize the data
+5. Standardize the data
+
+Python code for cleaning:
+```python
+df.fillna(df.mean(), inplace=True)
+```
+
+## Output
+True
+
+## Input Text
+This is the plan for cleaning:
+1. Fill missing values
+2. Remove duplicates
+3. Remove outliers
+4. Normalize the data
+5. Standardize the data
+
+Python code for cleaning:
+```python
+```
+
+## Output
+False
+"""
+
+CONTAINS_CODE_USER_MESSAGE_MD = """
+## Input Text
+{input_text}
+
+## Output
 """
 
 CODE_EXTRACTOR_SYSTEM_PROMPT_MD = """

@@ -9,7 +9,7 @@ from preliminary_analysis import preliminary_analysis
 from data_cleaning import data_cleaning
 logger = get_logger(__name__)
 
-path = "data/online_retail_II.csv"
+path = "data/online_retail_2.xlsx"
 
 def main():
     file_type = Path(path).suffix.replace(".", "")
