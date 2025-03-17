@@ -7,6 +7,7 @@ from util import get_logger
 from data_acquisition import get_data
 from preliminary_analysis import preliminary_analysis
 from data_cleaning import data_cleaning
+from descriptive_statistics import descriptive_statistics
 logger = get_logger(__name__)
 
 path = "data/online_retail_2.xlsx"
@@ -26,6 +27,10 @@ def main():
     logger.info("Running data cleaning")
     data_cleaning_report = data_cleaning(df, preliminary_results, preliminary_description, logger)
     logger.info(f"Data cleaning report:\n{data_cleaning_report}")
+
+    logger.info("Running descriptive statistics")
+    descriptive_statistics_report = descriptive_statistics(df, data_cleaning_report, logger)
+    logger.info(f"Descriptive statistics report:\n{descriptive_statistics_report}")
 
 if __name__ == "__main__":
     main()

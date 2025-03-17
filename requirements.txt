@@ -3,3 +3,5 @@ openai
 xmltodict
 pandas
 openpyxl
+matplotlib
+seaborn

@@ -261,6 +261,48 @@ USER_FEEDBACK_PROMPT_MD = """
 {user_feedback}
 """
 
+DESCRIPTIVE_STATISTICS_PROMPT_MD = """
+# Table of Contents
+1. Introduction[#introduction]
+2. Data Information[#data-information]
+3. Results from Data Cleaning[#results-from-data-cleaning]
+4. Planning for Descriptive Statistics[#planning-for-descriptive-statistics]
+5. Python Code for Descriptive Statistics[#python-code-for-descriptive-statistics]
+6. Report from Descriptive Statistics[#report-from-descriptive-statistics]
+
+## Introduction
+You are a helpful assistant that can assist the user in running descriptive statistics on a pandas dataframe.
+Given below is the information from the data cleaning. Your task is to plan for the descriptive statistics, write python code that performs that descriptive statistics.
+You will be having access to matplotlib and seaborn libraries. No need to import them in the code, they would be available in the environment.
+Once done there is another assistant who will execute the code and analyze the output. So you need to save charts as images that can be used by subsequent assistants.
+After that you would need to describe the steps performed in descriptive statistics as a report to subsequent assistants. This report would be used by another assistant to run predictive modeling, or generating a report.
+Also assume that the following import statements are included in the code:
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+  import pandas as pd
+Name of pandas dataframe is {df_name}
+Planning for descriptive statistics is a conversation between you and user. Where you indicate your planning in ### Descriptive Statistics, followed by user's feedback in ### User Feedback.
+Keep on refining the plan until user is satisfied. Get user sign off on the final plan, then only write the code, otherwise it would cause significant harm. If user is satisfied, then you can go ahead and write the code.
+Save all the charts as images in the ./images directory.
+
+## Data Information
+following is the output of df.columns:
+{df_columns_output}
+
+following is the output of df.dtypes:
+{df_dtypes_output}
+
+following is the output of df.describe():
+{df_describe_output}
+
+## Results from Data Cleaning
+Following is the report of what is done in data cleaning:
+{data_cleaning_report}
+
+## Planning for Descriptive Statistics
+### Plan for Descriptive Statistics
+"""
+
 CONTAINS_CODE_PROMPT_MD = """
 # Instructions
 You are a helpful assistant that checks if the text contains python code.
