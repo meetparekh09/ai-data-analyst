@@ -1,6 +1,7 @@
 import pandas as pd
 
 from util import print_logprobs
+from agent_utils import MessageProcessor
 from prompts import (
     SYSTEM_PROMPT_DATA_ACQUISITION_MD,
     SAMPLE_USER_MESSAGE_MD,
@@ -12,9 +13,27 @@ from constants import (
 from clients import get_openai_client
 
 
+class DataAcquisitionAgent:
+    def __init__(self, path, file_type, logger, verbose=False, n=2):
+        self.path = path
+        self.file_type = file_type
+        self.logger = logger
+        self.verbose = verbose
+        self.n = n
+        self.client = get_openai_client()
+        self.message_processor = MessageProcessor(self.client, available_tools=[], model=OPENAI_COMPLETION_MODEL, temperature=OPENAI_TEMPERATURE, stop=[], logger=self.logger)
+        
+    def _get_system_prompt(self):
+        return SYSTEM_PROMPT_DATA_ACQUISITION_MD
+    
+    def _get_user_prompt(self):
+        return SAMPLE_USER_MESSAGE_MD.format(path_name=self.path, file_type=self.file_type, logger_name=self.logger)
+    
+    
 
-def get_data(path, file_type, logger, verbose=False, n=2):
-    user_prompt = SAMPLE_USER_MESSAGE_MD.format(path_name=path, file_type=file_type, logger_name=logger)
+    
+def get_data(path, file_type, logger):
+    SAMPLE_USER_MESSAGE_MD.format(path_name=path, file_type=file_type, logger_name=logger)
     client = get_openai_client()
     ldict = locals()
     messages = [

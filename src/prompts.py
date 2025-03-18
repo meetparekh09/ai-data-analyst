@@ -283,7 +283,7 @@ Also assume that the following import statements are included in the code:
 Name of pandas dataframe is {df_name}
 Planning for descriptive statistics is a conversation between you and user. Where you indicate your planning in ### Descriptive Statistics, followed by user's feedback in ### User Feedback.
 Keep on refining the plan until user is satisfied. Get user sign off on the final plan, then only write the code, otherwise it would cause significant harm. If user is satisfied, then you can go ahead and write the code.
-Save all the charts as images in the ./images directory.
+Save all the analysis files like charts, tables, etc. in ./analysis directory.
 
 ## Data Information
 following is the output of df.columns:
